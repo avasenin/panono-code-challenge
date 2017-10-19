@@ -65,7 +65,7 @@ public class Statistics {
                     String.format("Bump for a timestamp from future %d (now: %d)", timestamp, now));
         }
 
-        if (expiredPred.test(timestamp, now)) {
+        if (isExpired(timestamp, now)) {
             return;
         }
 
@@ -90,7 +90,7 @@ public class Statistics {
      * @return statistics for a specified timestamp.
      */
     public Record get(long timestamp) {
-        if (expiredPred.test(timestamp, epoch())) {
+        if (isExpired(timestamp, epoch())) {
             storage.remove(timestamp);
             return null;
         }
@@ -105,7 +105,7 @@ public class Statistics {
     /**
      * Returns the full statistics for all not expired records.
      *
-     * @return full statistics
+     * @return statistics
      */
     public Record fullReport() {
         Record record = reduce(Record::merge);
@@ -119,7 +119,7 @@ public class Statistics {
         long now = epoch();
         Record acc = null;
         for (Map.Entry<Long, AtomicReference<Record>> entry : storage.entrySet()) {
-            if (!expiredPred.test(entry.getKey(), now)) {
+            if (!isExpired(entry.getKey(), now)) {
                 Record r = entry.getValue().get();
                 acc = reducer.apply(acc, r);
             } else {
@@ -130,6 +130,10 @@ public class Statistics {
         return acc;
     }
 
+    private boolean isExpired(long ts, long now) {
+       return expiredPred.test(ts, now);
+    }
+
     private long epoch() {
         return Instant.now().getEpochSecond();
     }
@@ -137,7 +141,7 @@ public class Statistics {
     private void removeOldValue(long now) {
         Set<Long> set = storage.keySet();
         for (long ts : set) {
-            if (expiredPred.test(ts, now)) {
+            if (isExpired(ts, now)) {
                 set.remove(ts);
             }
         }
