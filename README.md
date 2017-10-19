@@ -2,18 +2,18 @@
 
 The server implements the following [API](./swagger.yaml) (feel free to use swagger file to generate a client).
 
-My comments & context:
+My comments and some context:
 * It was pretty fun. I used the simillar task in the past for interview.
 * In case of no data the server returns statistics with 0 `{"count":0, "min": 0, "max":0 ...}`
 * Original task description use `{"avg": 1.0, "count": 2}` as an example for `/statistics` endpoint. I think it's wrong, `avg` should be 1.5 in the text
 * Due to time discrepancy, clients time could be ahead of server time. Server allows `/upload` requests from the _future_ if `client_epoch - server_epoch <= 1 second`
 
-## How to run server
+## How to run server?
 
 Type the following command to run server on 8080 port:
 
 ```
-$ ./gradlew bootRun
+ ./gradlew bootRun
 ```
 
 Use the following command to run unit and integration tests:
@@ -22,7 +22,7 @@ Use the following command to run unit and integration tests:
 ./gradlew check
 ```
 
-## How to check manually that everything is working
+## How to check manually that everything is working?
 
 ```
 $ http POST :8080/upload timestamp=`date +%s` count=1
