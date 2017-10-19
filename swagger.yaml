@@ -48,12 +48,10 @@ definitions:
     properties:
       timestamp:
         type: integer
-        format: int
         description: Epoch time of upload in UTC
         example: 12890212
       count:
         type: integer
-        format: int
         description: Number of uploaded panoramas
         example: 3
   Statistics:
@@ -61,26 +59,21 @@ definitions:
     properties:
       count:
         type: integer
-        format: int
         description: Total amount of `/upload` endpoint calls
         example: 2
       sum:
         type: integer
-        format: int
         description: Total amount of uploaded panoramas
         example: 3
       min:
         type: integer
-        format: int
         description: Minimum amount of panoramas per batch
         example: 1
       max:
         type: integer
-        format: int
         description: Maximum amount of panoramas per batch
         example: 2
       avg:
         type: number
-        format: float
         description: Average amount of uploaded panoramas per batch
         example: 1.5
