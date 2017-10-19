@@ -1,0 +1,86 @@
+swagger: '2.0'
+info:
+  description: This is an API for statistic data of panorama uploads.
+  version: 1.0.0
+  title: Panono code challenge
+  contact:
+    email: vaseninlol@gmail.com
+tags:
+  - name: upload
+    description: Upload panoramas
+  - name: statistics
+    description: Access to statistics data for uploaded panoramas
+paths:
+  /upload:
+    post:
+      tags:
+        - upload
+      summary: Uploads a batch of panoramas
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Information about uploaded panoramas
+          required: true
+          schema:
+            $ref: '#/definitions/BatchUpload'
+      responses:
+        '201':
+          description: Uploaded successfully
+        '204':
+          description: Timestamp is older than 60 seconds
+  /statistics:
+    get:
+      tags:
+        - statistics
+      summary: Return statistics for the last 60 seconds
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Statistics'
+definitions:
+  BatchUpload:
+    type: object
+    properties:
+      timestamp:
+        type: integer
+        format: int
+        description: Epoch time of upload in UTC
+        example: 12890212
+      count:
+        type: integer
+        format: int
+        description: Number of uploaded panoramas
+        example: 3
+  Statistics:
+    type: object
+    properties:
+      count:
+        type: integer
+        format: int
+        description: Total amount of `/upload` endpoint calls
+        example: 2
+      sum:
+        type: integer
+        format: int
+        description: Total amount of uploaded panoramas
+        example: 3
+      min:
+        type: integer
+        format: int
+        description: Minimum amount of panoramas per batch
+        example: 1
+      max:
+        type: integer
+        format: int
+        description: Maximum amount of panoramas per batch
+        example: 2
+      avg:
+        type: number
+        format: float
+        description: Average amount of uploaded panoramas per batch
+        example: 1.5
