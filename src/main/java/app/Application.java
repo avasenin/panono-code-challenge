@@ -61,11 +61,6 @@ public class Application {
         return ResponseEntity.accepted().build();
     }
 
-    @RequestMapping("/")
-    public ResponseEntity<String> greeting() {
-        return ResponseEntity.ok("Hello World");
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
