@@ -1,6 +1,5 @@
 package app;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class UploadEndpointTest {
 
     @Test
     public void postValidBatch() throws Exception {
-        long now= Instant.now().getEpochSecond();
+        long now = Instant.now().getEpochSecond();
         MockHttpServletRequestBuilder req = endpoint()
                 .content(String.format("{\"timestamp\":%d,\"count\":2}", now));
 

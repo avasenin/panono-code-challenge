@@ -22,7 +22,7 @@ public class Application {
 
     @Bean
     Statistics statistics() {
-       return new Statistics(STAT_WINDOW_SECS);
+        return new Statistics(STAT_WINDOW_SECS);
     }
 
     @Autowired
