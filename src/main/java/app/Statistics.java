@@ -103,17 +103,19 @@ public class Statistics {
     }
 
     /**
-     * Returns the statistics for all not expired records.
-     * <p>
-     * If value has empty statistics then null is returned.
+     * Returns the full statistics for all not expired records.
      *
-     * @return statistics for a all not expired records.
+     * @return full statistics
      */
     public Record fullReport() {
-        return reduce(Record::merge);
+        Record record = reduce(Record::merge);
+        if (null == record) {
+            return Record.empty();
+        }
+        return record;
     }
 
-    Record reduce(BiFunction<Record, Record, Record> reducer) {
+    private Record reduce(BiFunction<Record, Record, Record> reducer) {
         long now = epoch();
         Record acc = null;
         for (Map.Entry<Long, AtomicReference<Record>> entry : storage.entrySet()) {
@@ -124,6 +126,7 @@ public class Statistics {
                 storage.remove(entry.getKey());
             }
         }
+
         return acc;
     }
 
@@ -159,6 +162,10 @@ public class Statistics {
 
         Record bump(long val) {
             return merge(this, new Record(val));
+        }
+
+        static Record empty() {
+            return new Record(0, 0, 0, 0);
         }
 
         static Record merge(Record a, Record r) {

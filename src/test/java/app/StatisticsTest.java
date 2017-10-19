@@ -120,7 +120,7 @@ public class StatisticsTest {
     public void emptyStatsShouldReturnNull() {
         statistics = new Statistics(10);
         assertThat(statistics.storage.size(), equalTo(0));
-        assertThat(statistics.fullReport(), is(nullValue()));
+        assertThat(statistics.fullReport().count, is(0L));
     }
 
     @Test

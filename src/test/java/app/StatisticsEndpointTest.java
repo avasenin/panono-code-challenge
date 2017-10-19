@@ -52,4 +52,31 @@ public class StatisticsEndpointTest {
                 .andExpect(jsonPath("$.count", is(4)))
                 .andExpect(jsonPath("$.avg", is(4.0)));
     }
+
+    @Test
+    public void statisticsOnlyOneSecond() throws Exception {
+        long now = Instant.now().getEpochSecond();
+
+        upload(now, 3);
+        upload(now, 10);
+        upload(now, 2);
+        upload(now, 1);
+
+        this.mockMvc.perform(endpoint())
+                .andExpect(jsonPath("$.min", is(1)))
+                .andExpect(jsonPath("$.max", is(10)))
+                .andExpect(jsonPath("$.sum", is(16)))
+                .andExpect(jsonPath("$.count", is(4)))
+                .andExpect(jsonPath("$.avg", is(4.0)));
+    }
+
+    @Test
+    public void statisticsWhenDataIsAbsent() throws Exception {
+        this.mockMvc.perform(endpoint())
+                .andExpect(jsonPath("$.min", is(0)))
+                .andExpect(jsonPath("$.max", is(0)))
+                .andExpect(jsonPath("$.sum", is(0)))
+                .andExpect(jsonPath("$.count", is(0)))
+                .andExpect(jsonPath("$.avg", is(0.0)));
+    }
 }
