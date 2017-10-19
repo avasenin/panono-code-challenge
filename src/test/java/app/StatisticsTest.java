@@ -17,8 +17,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(JUnit4.class)
 public class StatisticsTest {
-    Statistics statistics;
-    long now = Instant.now().getEpochSecond();
+    private Statistics statistics;
+    private long now = Instant.now().getEpochSecond();
 
     @Test
     public void validBumpOperationShouldWork() {

@@ -57,7 +57,7 @@ public class UploadEndpointTest {
     public void postBatchFromFuture() throws Exception {
         long now = Instant.now().getEpochSecond();
         MockHttpServletRequestBuilder req = endpoint()
-                .content(String.format("{\"timestamp\":%d,\"count\":2}", now));
+                .content(String.format("{\"timestamp\":%d,\"count\":2}", now + 10));
 
         this.mockMvc.perform(req)
                 .andExpect(status().is(204));
