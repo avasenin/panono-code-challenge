@@ -24,16 +24,6 @@ public class UploadEndpointTest {
     @Autowired
     private MockMvc mockMvc;
 
-    public static String asJsonString(final Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            final String jsonContent = mapper.writeValueAsString(obj);
-            return jsonContent;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public MockHttpServletRequestBuilder endpoint() {
         return post("/upload").contentType(MediaType.APPLICATION_JSON_UTF8);
     }
@@ -46,9 +36,9 @@ public class UploadEndpointTest {
 
     @Test
     public void postValidBatch() throws Exception {
-        UploadRequest requestBody = new UploadRequest(Instant.now().getEpochSecond(), 2);
+        long now= Instant.now().getEpochSecond();
         MockHttpServletRequestBuilder req = endpoint()
-                .content(asJsonString(requestBody));
+                .content(String.format("{\"timestamp\":%d,\"count\":2}", now));
 
         this.mockMvc.perform(req)
                 .andExpect(status().isAccepted());
@@ -56,9 +46,9 @@ public class UploadEndpointTest {
 
     @Test
     public void postExpiredBatch() throws Exception {
-        UploadRequest requestBody = new UploadRequest(Instant.now().getEpochSecond() - 100, 2);
+        long now = Instant.now().getEpochSecond();
         MockHttpServletRequestBuilder req = endpoint()
-                .content(asJsonString(requestBody));
+                .content(String.format("{\"timestamp\":%d,\"count\":2}", now - 100));
 
         this.mockMvc.perform(req)
                 .andExpect(status().is(204));
@@ -66,9 +56,9 @@ public class UploadEndpointTest {
 
     @Test
     public void postBatchFromFuture() throws Exception {
-        UploadRequest requestBody = new UploadRequest(Instant.now().getEpochSecond() + 3, 2);
+        long now = Instant.now().getEpochSecond();
         MockHttpServletRequestBuilder req = endpoint()
-                .content(asJsonString(requestBody));
+                .content(String.format("{\"timestamp\":%d,\"count\":2}", now));
 
         this.mockMvc.perform(req)
                 .andExpect(status().is(204));
@@ -76,9 +66,9 @@ public class UploadEndpointTest {
 
     @Test
     public void postZeroPanoramas() throws Exception {
-        UploadRequest requestBody = new UploadRequest(Instant.now().getEpochSecond() - 10, 0);
+        long now = Instant.now().getEpochSecond();
         MockHttpServletRequestBuilder req = endpoint()
-                .content(asJsonString(requestBody));
+                .content(String.format("{\"timestamp\":%d,\"count\":0}", now));
 
         this.mockMvc.perform(req)
                 .andExpect(status().is(204));
