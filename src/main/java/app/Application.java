@@ -1,7 +1,11 @@
 package app;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +17,17 @@ import java.time.Instant;
 @SpringBootApplication
 @RestController
 public class Application {
+    private static Logger LOG = LoggerFactory.getLogger(Application.class);
+    private static int STAT_WINDOW_SECS = 60;
 
-    private static long STAT_WINDOW_SECS = 60;
+    @Bean
+    Statistics statistics() {
+       return new Statistics(STAT_WINDOW_SECS);
+    }
+
+    @Autowired
+    private Statistics statistics;
+
 
     @RequestMapping(value = "/upload", consumes = {"application/json"}, method = RequestMethod.POST)
     public ResponseEntity<Void> batchUpload(@RequestBody UploadRequest req) {
@@ -34,6 +47,15 @@ public class Application {
 
         if (isTooOld || isFromFuture) {
             return ResponseEntity.status(204).build();
+        }
+
+        try {
+            statistics.bump(req.getTimestamp(), req.getCount());
+        } catch (Exception ex) {
+            // I assumed that upload operation should not fail
+            // if something wrong with statistics. Wrap to try-catch
+            // and output exception to the log if it's thrown.
+            LOG.error("Failed to report statistics", ex);
         }
 
         return ResponseEntity.accepted().build();
