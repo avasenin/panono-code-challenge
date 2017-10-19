@@ -61,6 +61,12 @@ public class Application {
         return ResponseEntity.accepted().build();
     }
 
+    @RequestMapping(value = "/statistics", produces = {"application/json"}, method = RequestMethod.GET)
+    public ResponseEntity<StatResponse> getStatistics() {
+        StatResponse response = new StatResponse(statistics.fullReport());
+        return ResponseEntity.ok(response);
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
