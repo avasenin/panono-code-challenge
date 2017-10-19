@@ -15,12 +15,12 @@ import java.util.function.BiPredicate;
  * Storage expires old values passively. There are several cases when storage
  * tries to clean up garbage:
  * <ul>
- * <li>Storage discovers that user requested an expired key. Specific key will be removed from storage</li>
- * <li>Expired keys are discovered when report is generated. All expired keys will be removed from storage</li>
+ * <li>Storage discovers that user requested an expired key. This key will be removed from storage</li>
+ * <li>Expired keys are discovered when full report is generated. All expired keys will be removed from storage</li>
  * <li>New timestamp is added to the storage. Storage scans for all expired values</li>
  * </ul>
  * <p>
- * These guaranties that number of elements in storage <= ttl.
+ * The number of elements in storage <= ttl all the time.
  * <p>
  * All operations are thread safe.
  */
