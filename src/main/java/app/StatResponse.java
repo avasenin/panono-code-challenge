@@ -27,6 +27,6 @@ public class StatResponse {
         if (0 == count) {
             return 0;
         }
-        return sum / count;
+        return (double) sum / count;
     }
 }

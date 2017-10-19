@@ -44,15 +44,15 @@ public class StatisticsEndpointTest {
 
         upload(now - 5, 3);
         upload(now - 10, 10);
-        upload(now - 7, 2);
+        upload(now - 7, 4);
         upload(now, 1);
 
         this.mockMvc.perform(endpoint())
                 .andExpect(jsonPath("$.min", is(1)))
                 .andExpect(jsonPath("$.max", is(10)))
-                .andExpect(jsonPath("$.sum", is(16)))
+                .andExpect(jsonPath("$.sum", is(18)))
                 .andExpect(jsonPath("$.count", is(4)))
-                .andExpect(jsonPath("$.avg", is(4.0)));
+                .andExpect(jsonPath("$.avg", is(4.5)));
     }
 
     @Test
