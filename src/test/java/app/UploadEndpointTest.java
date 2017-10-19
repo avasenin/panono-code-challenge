@@ -73,4 +73,14 @@ public class UploadEndpointTest {
         this.mockMvc.perform(req)
                 .andExpect(status().is(204));
     }
+
+    @Test
+    public void postZeroPanoramas() throws Exception {
+        UploadRequest requestBody = new UploadRequest(Instant.now().getEpochSecond() - 10, 0);
+        MockHttpServletRequestBuilder req = endpoint()
+                .content(asJsonString(requestBody));
+
+        this.mockMvc.perform(req)
+                .andExpect(status().is(204));
+    }
 }
